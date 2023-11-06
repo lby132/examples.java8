@@ -1,5 +1,6 @@
 package main;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -83,6 +84,19 @@ public class FunctionalInterfaceExamples {
 
     public static void main(String[] args) {
         println("Area is ", 12, 20, (message, length, width) -> (message + (length * width)));
+
+        final BigDecimalToCurrency bigDecimalToCurrency = bd -> "$" + bd;
+        System.out.println(bigDecimalToCurrency.toCurrency(new BigDecimal("120.00")));
+
+        final InvalidFunctionalInterface invalidFunctionalInterface = new InvalidFunctionalInterface() {
+            @Override
+            public <T> String toString(T value) {
+                return value.toString();
+            }
+        };
+
+        // 만든 functionalInterface 가 <T> 이기 때문에 타입 추론이 불가능 하여 람다표현식 사용불가. 따라서 타입을 정해주던지 위 방식 처럼 사용해야함
+        // InvalidFunctionalInterface invalidFunctionalInterface1 = value -> value.toString();
     }
 
     private static <T1, T2, T3> void println(T1 t1, T2 t2, T3 t3, Function3<T1, T2, T3, String> function) {
@@ -92,4 +106,14 @@ public class FunctionalInterfaceExamples {
 
 interface Function3<T1, T2, T3, R> {
     R apply(T1 t1, T2 t2, T3 t3);
+}
+
+@FunctionalInterface
+interface BigDecimalToCurrency {
+    String toCurrency(BigDecimal value);
+}
+
+@FunctionalInterface
+interface InvalidFunctionalInterface {
+    <T> String toString(T value);
 }
