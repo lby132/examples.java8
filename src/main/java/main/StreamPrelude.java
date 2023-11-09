@@ -17,10 +17,11 @@ public class StreamPrelude {
         System.out.println(
                 map(numbers, i -> i * 2)
         );
+        //람다를 사용하여 identity function 을 해줌으로써 null 신경쓰지 않아도 됨
         System.out.println(
                 map(numbers, i -> i)
         );
-        //identity function 을 사용하여 null신경쓰지 않아도 됨
+        //Function.identity() 를 사용하여 null 신경쓰지 않아도 됨
         System.out.println(
                 map(numbers, Function.identity())
         );
