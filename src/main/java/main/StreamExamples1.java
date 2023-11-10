@@ -19,6 +19,7 @@ public class StreamExamples1 {
 
         final List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 
+        // Stream방식은 지연연산으로 15번만 실행됨
         System.out.println("Functional result: " + numbers.stream()
                 .filter(n -> n > 3)
                 .filter(n -> n < 9)
@@ -27,6 +28,13 @@ public class StreamExamples1 {
                 .findFirst()
         );
 
+//        final List<Integer> greaterThan3 = filter(numbers, i -> i > 3);
+//        final List<Integer> lessThan9 = filter(greaterThan3, i -> i < 9);
+//        final List<Integer> doubled = map(lessThan9, i -> i * 2);
+//        final List<Integer> greaterThan10 = filter(doubled, i -> i > 10);
+//        System.out.println(greaterThan10.get(0));
+
+        // 아래 방식은 27번 실행됨
         final AtomicInteger count = new AtomicInteger(1);
 
         final List<Integer> greaterThan3 = filter(numbers, i -> {
@@ -45,7 +53,22 @@ public class StreamExamples1 {
             System.out.println(count.getAndAdd(1) + ": i > 3");
             return i > 10;
         });
-        System.out.println("My own method result: " + greaterThan10.get(0));
+        System.out.println("My own method result: " + greaterThan10);
+        System.out.println("greaterThan10.get(0) = " + greaterThan10.get(0));
+
+        System.out.println("==========================================");
+
+        final List<Integer> myOwnMethodResult =
+                filter(
+                        map(
+                                filter(
+                                        filter(numbers,
+                                                i -> i > 3),
+                                        i -> i < 9),
+                                i -> i * 2),
+                        i -> i > 10);
+        System.out.println("myOwnMethodResult = " + myOwnMethodResult);
+        System.out.println("myOwnMethodResult.get(0) = " + myOwnMethodResult.get(0));
 
     }
 
